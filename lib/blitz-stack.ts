@@ -1,15 +1,20 @@
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as alias from '@aws-cdk/aws-route53-targets';
 import * as cdk from '@aws-cdk/core';
+import * as codebuild from '@aws-cdk/aws-codebuild';
+import * as codecommit from '@aws-cdk/aws-codecommit';
+import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as ec2 from '@aws-cdk/aws-ec2';
+import * as ecr from '@aws-cdk/aws-ecr';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as route53 from '@aws-cdk/aws-route53';
 
 interface BlitzStackProps extends cdk.StackProps {
   certificate: acm.Certificate,
-  domain: string,
-  host: string
+  dnsDomain: string,
+  dnsHost: string,
+  gitRepository: codecommit.Repository
 }
 
 export class BlitzStack extends cdk.Stack {
@@ -79,12 +84,12 @@ export class BlitzStack extends cdk.Stack {
     });
 
     const zone = route53.HostedZone.fromLookup(this, 'zone', {
-      domainName: props.domain
+      domainName: props.dnsDomain
     });
 
     new route53.ARecord(this, 'load-balancer-a-record', {
       zone: zone,
-      recordName: props.host,
+      recordName: props.dnsHost,
       target: route53.RecordTarget.fromAlias(new alias.LoadBalancerTarget(lb))
     });
 

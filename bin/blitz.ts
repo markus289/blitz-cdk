@@ -1,19 +1,20 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { BlitzCertStack } from '../lib/blitz-cert-stack';
 import { BlitzConfig } from '../lib/blitz-config';
+import { BlitzPerpetualStack } from '../lib/blitz-perpetual-stack';
 import { BlitzStack } from '../lib/blitz-stack';
 
 const app = new cdk.App();
-const blitzCertStack = new BlitzCertStack(app, 'BlitzCertStack', {
+const blitzPerpetualStack = new BlitzPerpetualStack(app, 'BlitzPerpetualStack', {
   env: BlitzConfig.env,
-  domain: BlitzConfig.domain,
-  host: BlitzConfig.host
+  dnsDomain: BlitzConfig.dnsDomain,
+  dnsHost: BlitzConfig.dnsHost
 });
 new BlitzStack(app, 'BlitzStack', {
   env: BlitzConfig.env,
-  certificate: blitzCertStack.certificate,
-  domain: BlitzConfig.domain,
-  host: BlitzConfig.host
+  certificate: blitzPerpetualStack.certificate,
+  dnsDomain: BlitzConfig.dnsDomain,
+  dnsHost: BlitzConfig.dnsHost,
+  gitRepository: blitzPerpetualStack.gitRepository
 });

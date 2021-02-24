@@ -5,6 +5,6 @@ export const BlitzConfig = {
   },
   // the application will be available at https://host.domain/,
   // make sure that 'domain' is a zone that is hosted on Route 53.
-  domain: 'some.domain.tld',
-  host: 'blitz'
+  dnsDomain: 'some.domain.tld',
+  dnsHost: 'blitz'
 }
